@@ -8,11 +8,12 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/Anikesh0001/maven2.git'
-            }
-        }
+       stage('Checkout') {
+    steps {
+        git branch: 'main',
+        url: 'https://github.com/Anikesh0001/maven2.git'
+    }
+}
 
         stage('Build') {
             steps {
