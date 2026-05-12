@@ -11,4 +11,3 @@ public class AppTest {
         assertEquals("Hello, Student! Welcome to Maven CI/CD Demo.", result);
     }
 }
-
