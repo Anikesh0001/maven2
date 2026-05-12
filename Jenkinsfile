@@ -2,18 +2,19 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'
-        jdk 'JDK17'
+        maven 'Maven'
+        jdk 'JDK21'
     }
 
     stages {
 
-       stage('Checkout') {
-    steps {
-        git branch: 'main',
-        url: 'https://github.com/Anikesh0001/maven2.git'
-    }
-}
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/Anikesh0001/maven2.git',
+                    credentialsId: 'github-token'
+            }
+        }
 
         stage('Build') {
             steps {
@@ -31,6 +32,32 @@ pipeline {
             steps {
                 sh 'mvn package'
             }
+        }
+
+        stage('Run Application') {
+            steps {
+                sh 'mvn exec:java -Dexec.mainClass="com.example.app.App"'
+            }
+        }
+    }
+
+    
+    post {
+
+        success {
+            emailext (
+                subject: "SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}",
+                body: "Build succeeded!\nCheck: ${BUILD_URL}",
+                to: "anikeshkr0002@gmail.com"
+            )
+        }
+
+        failure {
+            emailext (
+                subject: "FAILED: ${JOB_NAME} #${BUILD_NUMBER}",
+                body: "Build failed!\nCheck: ${BUILD_URL}",
+                to: "anikeshkr0002@gmail.com"
+            )
         }
     }
 }
